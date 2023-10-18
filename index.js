@@ -29,9 +29,17 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const brandsCollection = client.db("ritzy-carDb").collection("brands");
+        const productsCollection = client.db("ritzy-carDb").collection("products");
 
         app.get('/brands', async (req, res) => {
             const result = await brandsCollection.find().toArray();
+            res.send(result)
+        })
+        app.get('/brands/:brandsName', async (req, res) => {
+            const brandName = req.params.brandsName;
+            const query = { brandName: brandName }
+            const result = await productsCollection.find(query).toArray();
+
             res.send(result)
         })
         // Send a ping to confirm a successful connection
