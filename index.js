@@ -81,6 +81,12 @@ async function run() {
         })
 
         // cart collection
+        app.get('/carts', async (req, res) => {
+            const result = await cartsCollection.find().toArray();
+            res.send(result)
+        })
+
+        //add db a cart
         app.post('/carts', async (req, res) => {
             const item = req.body;
             const query = { userEmail: item.userEmail, productId: item.productId }
@@ -93,6 +99,14 @@ async function run() {
                 const result = await cartsCollection.insertOne(item);
                 res.send(result)
             }
+        })
+
+        //Delete a cart
+        app.delete('/carts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await cartsCollection.deleteOne(query);
+            res.send(result)
         })
 
         // Send a ping to confirm a successful connection
