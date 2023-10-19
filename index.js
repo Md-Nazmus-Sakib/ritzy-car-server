@@ -30,6 +30,7 @@ async function run() {
         await client.connect();
         const brandsCollection = client.db("ritzy-carDb").collection("brands");
         const productsCollection = client.db("ritzy-carDb").collection("products");
+        const cartsCollection = client.db("ritzy-carDb").collection("carts");
 
         app.get('/brands', async (req, res) => {
             const result = await brandsCollection.find().toArray();
@@ -77,6 +78,21 @@ async function run() {
             const result = await productsCollection.updateOne(filter, product, options);
             res.send(result)
 
+        })
+
+        // cart collection
+        app.post('/carts', async (req, res) => {
+            const item = req.body;
+            const query = { userEmail: item.userEmail, productId: item.productId }
+            const exist = await cartsCollection.findOne(query);
+            console.log(exist)
+            if (exist) {
+                return res.send('already exist')
+            }
+            else {
+                const result = await cartsCollection.insertOne(item);
+                res.send(result)
+            }
         })
 
         // Send a ping to confirm a successful connection
