@@ -31,7 +31,12 @@ async function run() {
         const brandsCollection = client.db("ritzy-carDb").collection("brands");
         const productsCollection = client.db("ritzy-carDb").collection("products");
         const cartsCollection = client.db("ritzy-carDb").collection("carts");
+        const imagesCollection = client.db("ritzy-carDb").collection("images");
 
+        app.get('/images', async (req, res) => {
+            const result = await imagesCollection.find().toArray();
+            res.send(result)
+        })
         app.get('/brands', async (req, res) => {
             const result = await brandsCollection.find().toArray();
             res.send(result)
