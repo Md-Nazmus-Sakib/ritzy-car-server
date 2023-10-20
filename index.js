@@ -8,12 +8,28 @@ const port = process.env.PORT || 5000;
 
 
 // middle wear
-app.use(cors())
+
+// app.use(cors())
+// app.use(express.json());
+// const corsOptions = {
+//     origin: '*',
+//     credentials: true,
+//     optionSuccessStatus: 200,
+// }
+
 app.use(express.json());
+const corsConfig = {
+    origin: '*',
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+}
+app.use(cors(corsConfig))
 
 
+//user:ritzy-car-db
+//pass:EBfDH6YkQYCnQ1lg
 
-const uri = `mongodb+srv://nazmussakib0036:${process.env.DB_PASSWORD}@cluster0.91makds.mongodb.net/?retryWrites=true&w=majority`;
+const uri = "mongodb+srv://ritzy-car-db:EBfDH6YkQYCnQ1lg@cluster0.91makds.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -27,7 +43,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
         const brandsCollection = client.db("ritzy-carDb").collection("brands");
         const productsCollection = client.db("ritzy-carDb").collection("products");
         const cartsCollection = client.db("ritzy-carDb").collection("carts");
@@ -117,12 +133,14 @@ async function run() {
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
+    }
+
+    finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
     }
 }
-run().catch(console.dir);
+run().catch(console.log);
 
 
 app.get('/', (req, res) => {
